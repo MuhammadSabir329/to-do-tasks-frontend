@@ -37,7 +37,7 @@ function Main({
   onAddStarredTask,
 }) {
   return (
-    <div className="h-screen w-screen flex md:flex-col items-stretch bg-[#1c1c1c] text-white font-sans pt-3 pr-4">
+    <div className="h-screen w-screen flex flex-col items-stretch bg-[#1c1c1c] text-white font-sans pt-3 pr-4">
       <Header onMenuClose={onMenuClose} />
       <div className="flex-1 flex">
         {isMenuOpen && (
