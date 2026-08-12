@@ -1,0 +1,32 @@
+@import "tailwindcss";
+/* Add to your index.css or app.css if scrollbars are completely invisible on your OS */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1f1f1f;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #3c4043;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #5f6368;
+}
+
+.custom1-scrollbar::-webkit-scrollbar {
+  height: 8px;
+  width: 9px;
+}
+
+.custom1-scrollbar::-webkit-scrollbar-thumb {
+  background: #3c4043;
+  border-radius: 4px;
+}
+
+.custom1-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #5f6368;
+}
