@@ -1,10 +1,12 @@
+import noTaskImage from "../assets/notask-removebg-preview.png";
+
 export default function NoTasksCard({ isAddTaskOpen }) {
   if (!isAddTaskOpen)
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
         <img
           className=" w-45"
-          src=".\src\assets\notask-removebg-preview.png"
+          src={noTaskImage}
           alt="No Tasks Image"
         />
         <h4 className="text-[20px] font-semibold text-[#e3e3e3] mb-2.5">
