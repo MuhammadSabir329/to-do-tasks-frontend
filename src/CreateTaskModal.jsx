@@ -88,7 +88,7 @@ export default function CreateTaskModal({
               <span>{selectedList ? selectedList.title : "Select a list"}</span>
               <svg
                 className={`w-4 h-4 text-[#c4c7c5] transition-transform duration-200 ${
-                  isListPickerOpen ? "rotate-180" : ""
+                  isListPickerOpen ? "" : "rotate-180"
                 }`}
                 fill="none"
                 stroke="currentColor"
