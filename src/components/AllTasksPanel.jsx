@@ -124,9 +124,9 @@ function TaskListCard({
 
   return (
     <div
-      className={`shrink-0 h-110 bg-[#131314] border-[0.5px] border-transparent hover:border-[#ffffff] rounded-2xl mt-3 py-3 px-2.5 flex flex-col select-none
-        ${count === 1 ? "w-170" : ""}
-        ${count === 2 ? "w-[calc(50%-8px)] min-w-100" : ""}
+      className={`shrink-0 h-110 bg-[#131314] border-[0.5px] border-transparent hover:border-[#ffffff] rounded-2xl mt-5 py-3 px-2.5 flex flex-col select-none
+        ${count === 1 ? "w-100 md:w-170" : ""}
+        ${count === 2 ? "w-75 min-w-75 md:w-[calc(50%-8px)] md:min-w-100" : ""}
         ${count >= 3 ? "w-75 min-w-75 shrink-0" : ""}
       `}
     >
@@ -188,9 +188,9 @@ export default function AllTasksPanel({
 
   return (
     <div
-      className={`w-full relative h-full flex items-start gap-4 overflow-x-auto pb-4 custom-scrollbar
-        ${count === 1 ? "justify-center" : ""}
-        ${count === 2 ? "justify-center" : ""}
+      className={`w-full relative h-full flex items-start gap-3.5 overflow-x-auto px-3.5 md:px-0 pb-4 custom-scrollbar
+        ${count === 1 ? "justify-start md:justify-center" : ""}
+        ${count === 2 ? "justify-start md:justify-center" : ""}
         ${count >= 3 ? "justify-start" : ""}
       `}
     >

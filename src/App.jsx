@@ -37,7 +37,7 @@ function Main({
   onAddStarredTask,
 }) {
   return (
-    <div className="h-screen w-screen flex flex-col items-stretch bg-[#1c1c1c] text-white font-sans pt-3 pr-4">
+    <div className="h-screen w-screen flex flex-col items-stretch bg-[#1c1c1c] text-white font-sans pt-3 md:pr-4">
       <Header onMenuClose={onMenuClose} />
       <div className="flex-1 flex">
         {isMenuOpen && (
@@ -64,7 +64,7 @@ function Main({
           </div>
         )}
 
-        <main className="flex-1 h-full pl-0 pr-2 min-w-0 ">
+        <main className="flex-1 h-full w-full pl-0 md:pr-2 min-w-0 ">
           {activeTab === "starred" && (
             <StarredTasksPanel
               lists={lists}

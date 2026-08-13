@@ -52,7 +52,7 @@ export default function CreateTaskModal({
       onClick={handleClose}
     >
       <div
-        className="bg-[#2d3033] text-white w-100 h-70 p-6 rounded-[28px] justify-between shadow-2xl flex flex-col gap-5"
+        className="bg-[#2d3033] text-white w-80 h-65 md:w-100 p-6 rounded-[28px] justify-between shadow-2xl flex flex-col gap-5"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-normal text-[#e3e3e3] px-1">
