@@ -103,6 +103,7 @@ function Main({
 }
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
   const onTabChange = (tabText) => {
     setActiveTab(tabText);
@@ -118,14 +119,20 @@ export default function App() {
 
   useEffect(() => {
     const fetchLists = async () => {
-      const response = await fetch(`${API_URL}/lists`);
-      const rawData = await response.json();
-      const data = rawData.map(normalizeList);
+      try {
+        const response = await fetch(`${API_URL}/lists`);
+        const rawData = await response.json();
+        const data = rawData.map(normalizeList);
 
-      const sortedLists = [...data].sort((a, b) =>
-        a.title === "My Tasks" ? -1 : b.title === "My Tasks" ? 1 : 0,
-      );
-      setLists(sortedLists);
+        const sortedLists = [...data].sort((a, b) =>
+          a.title === "My Tasks" ? -1 : b.title === "My Tasks" ? 1 : 0,
+        );
+        setLists(sortedLists);
+      } catch (err) {
+        console.error("Failed to fetch lists:", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchLists();
   }, []);
@@ -323,6 +330,14 @@ export default function App() {
       }),
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen w-screen bg-[#131314]">
+        <div className="w-10 h-10 border-4 border-[#3c4043] border-t-[#8ab4f8] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <Main
