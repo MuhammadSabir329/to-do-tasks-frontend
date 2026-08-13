@@ -191,8 +191,8 @@ export default function AllTasksPanel({
   return (
     <div
       className={`w-full relative h-full flex items-start gap-3.5 overflow-x-auto px-3.5 md:px-0 pb-4 custom-scrollbar
-        ${count === 1 ? "justify-start md:justify-center" : ""}
-        ${count === 2 ? "justify-start md:justify-center" : ""}
+        ${count === 1 ? "justify-start min-[1250px]:justify-center" : ""}
+        ${count === 2 ? "justify-start min-[1250px]:justify-center" : ""}
         ${count >= 3 ? "justify-start" : ""}
       `}
     >
