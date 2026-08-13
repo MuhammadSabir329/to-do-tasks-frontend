@@ -126,8 +126,8 @@ function TaskListCard({
     <div
       className={`shrink-0 h-110 bg-[#131314] border-[0.5px] border-transparent hover:border-[#ffffff] rounded-2xl mt-5 py-3 px-2.5 flex flex-col select-none
         ${count === 1 ? "w-100 md:w-170" : ""}
-        ${count === 2 ? "w-75 min-w-75 md:w-[calc(50%-8px)] md:min-w-100" : ""}
-        ${count >= 3 ? "w-75 min-w-75 shrink-0" : ""}
+        ${count === 2 ? "w-65 min-w-65 md:w-[calc(50%-8px)] md:min-w-100" : ""}
+        ${count >= 3 ? "w-65 min-w-65 md:w-75 md:min-w-75 shrink-0" : ""}
       `}
     >
       <TaskHeader
