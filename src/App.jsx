@@ -91,6 +91,7 @@ function Main({
                   onDeleteTask={onDeleteTask}
                   onMoveTaskToList={onMoveTaskToList}
                   onStarredTaskClick={onStarredTaskClick}
+                  isMenuOpen={isMenuOpen}
                 />
               )}
             </>

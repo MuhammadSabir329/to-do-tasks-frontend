@@ -115,6 +115,7 @@ function TaskListCard({
   onDeleteTask,
   onMoveTaskToList,
   onStarredTaskClick,
+  isMenuOpen,
 }) {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
@@ -125,7 +126,7 @@ function TaskListCard({
   return (
     <div
       className={`shrink-0 h-110 bg-[#131314] border-[0.5px] border-transparent hover:border-[#ffffff] rounded-2xl mt-5 py-3 px-2.5 flex flex-col select-none
-        ${count === 1 ? "w-[calc(100%-0px)] md:w-170" : ""}
+        ${count === 1 ? (isMenuOpen ? "w-80 md:w-170" : "w-full md:w-170") : ""}
         ${count === 2 ? "w-75 min-w-75 md:w-[calc(50%-8px)] md:min-w-100" : ""}
         ${count >= 3 ? "w-75 min-w-75 shrink-0" : ""}
       `}
@@ -177,6 +178,7 @@ export default function AllTasksPanel({
   onDeleteTask,
   onMoveTaskToList,
   onStarredTaskClick,
+  isMenuOpen,
 }) {
   const activeLists = lists.filter((list) => list.isChecked);
   const count = activeLists.length;
@@ -210,6 +212,7 @@ export default function AllTasksPanel({
           onDeleteTask={onDeleteTask}
           onMoveTaskToList={onMoveTaskToList}
           onStarredTaskClick={onStarredTaskClick}
+          isMenuOpen={isMenuOpen}
         />
       ))}
     </div>
