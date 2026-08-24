@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import SignUp from "./SignUp";
+import SignIn from "./SignIn";
 import Header from "./components/Header";
 import AllTasksPanel from "./components/AllTasksPanel";
 import ListPanel from "./components/ListPanel";
@@ -78,6 +80,8 @@ function Main({
 }
 
 export default function App() {
+  const [authView, setAuthView] = useState("signup");
+  const token = useSelector((state) => state.auth.token);
   const [isListsOpen, setIsListsOpen] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(() => {
     return window.matchMedia("(min-width: 768px)").matches;
@@ -98,6 +102,19 @@ export default function App() {
 
   const activeLists = lists.filter((list) => list.isChecked);
 
+  if (!token) {
+    return (
+      <>
+        {authView === "signup" && (
+          <SignUp onSwitchToSignIn={() => setAuthView("signin")} />
+        )}
+        {authView === "signin" && (
+          <SignIn onSwitchToSignUp={() => setAuthView("signup")} />
+        )}
+      </>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen w-screen bg-[#131314]">
@@ -105,6 +122,7 @@ export default function App() {
       </div>
     );
   }
+  
   return (
     <Main
       onAddListClick={() => setisListModalOpen(!isListModalOpen)}

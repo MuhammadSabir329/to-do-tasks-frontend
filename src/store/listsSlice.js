@@ -8,23 +8,33 @@ const normalizeList = (list) => ({
   tasks: list.tasks.map((task) => ({ ...task, id: task._id })),
 });
 
-export const fetchLists = createAsyncThunk("lists/fetchLists", async () => {
-  const response = await fetch(`${API_URL}/lists`);
-  const rawData = await response.json();
-  const data = rawData.map(normalizeList);
+export const fetchLists = createAsyncThunk(
+  "lists/fetchLists",
+  async (_, { getState }) => {
+    const token = getState().auth.token;
+    const response = await fetch(`${API_URL}/lists`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const rawData = await response.json();
+    const data = rawData.map(normalizeList);
 
-  const sortedLists = [...data].sort((a, b) =>
-    a.title === "My Tasks" ? -1 : b.title === "My Tasks" ? 1 : 0,
-  );
-  return sortedLists;
-});
+    const sortedLists = [...data].sort((a, b) =>
+      a.title === "My Tasks" ? -1 : b.title === "My Tasks" ? 1 : 0,
+    );
+    return sortedLists;
+  },
+);
 
 export const addNewList = createAsyncThunk(
   "lists/addNewList",
-  async ({ title }) => {
+  async ({ title }, { getState }) => {
+    const token = getState().auth.token;
     const response = await fetch(`${API_URL}/lists`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ title }),
     });
     const newList = normalizeList(await response.json());
@@ -35,6 +45,7 @@ export const addNewList = createAsyncThunk(
 export const updateList = createAsyncThunk(
   "lists/updateList",
   async ({ listId, newTitle, isChecked }, { getState }) => {
+    const token = getState().auth.token;
     let body = {};
 
     if (newTitle !== undefined) {
@@ -42,13 +53,16 @@ export const updateList = createAsyncThunk(
     }
 
     if (isChecked !== undefined) {
-      const list = getState().lists.items.find((list) => list.id === listId);
+      const list = getState().lists.items.find((l) => l.id === listId);
       body.isChecked = list.isChecked;
     }
 
     const response = await fetch(`${API_URL}/lists/${listId}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(body),
     });
     const updatedList = normalizeList(await response.json());
@@ -58,9 +72,11 @@ export const updateList = createAsyncThunk(
 
 export const deleteList = createAsyncThunk(
   "lists/deleteList",
-  async (listId) => {
+  async (listId, { getState }) => {
+    const token = getState().auth.token;
     await fetch(`${API_URL}/lists/${listId}`, {
       method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
     });
     return listId;
   },
@@ -68,10 +84,14 @@ export const deleteList = createAsyncThunk(
 
 export const addTask = createAsyncThunk(
   "lists/addTask",
-  async ({ listId, taskTitle, isStarred = false }) => {
+  async ({ listId, taskTitle, isStarred = false }, { getState }) => {
+    const token = getState().auth.token;
     const response = await fetch(`${API_URL}/lists/${listId}/tasks`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ title: taskTitle, isStarred }),
     });
     const updatedList = normalizeList(await response.json());
@@ -85,10 +105,11 @@ export const updateTask = createAsyncThunk(
     { listId, taskId, newTitle, isCompleted, isStarred },
     { getState },
   ) => {
+    const token = getState().auth.token;
     let body = {};
 
-    const list = getState().lists.items.find((list) => list.id === listId);
-    const task = list.tasks.find((task) => task.id === taskId);
+    const list = getState().lists.items.find((l) => l.id === listId);
+    const task = list.tasks.find((t) => t.id === taskId);
 
     if (newTitle !== undefined) {
       body.newTitle = newTitle;
@@ -105,7 +126,10 @@ export const updateTask = createAsyncThunk(
 
     const response = await fetch(`${API_URL}/lists/${listId}/tasks/${taskId}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(body),
     });
 
@@ -116,9 +140,11 @@ export const updateTask = createAsyncThunk(
 
 export const deleteTask = createAsyncThunk(
   "lists/deleteTask",
-  async ({ listId, taskId }) => {
+  async ({ listId, taskId }, { getState }) => {
+    const token = getState().auth.token;
     await fetch(`${API_URL}/lists/${listId}/tasks/${taskId}`, {
       method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     return { listId, taskId };
@@ -127,9 +153,11 @@ export const deleteTask = createAsyncThunk(
 
 export const deleteCompletedListTasks = createAsyncThunk(
   "lists/deleteCompletedListTasks",
-  async (listId) => {
+  async (listId, { getState }) => {
+    const token = getState().auth.token;
     const response = await fetch(`${API_URL}/lists/${listId}/tasks/completed`, {
       method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
     });
     const updatedList = normalizeList(await response.json());
     return updatedList;
@@ -138,12 +166,16 @@ export const deleteCompletedListTasks = createAsyncThunk(
 
 export const moveTaskToList = createAsyncThunk(
   "lists/moveTaskToList",
-  async ({ movingListId, currentListId, taskId }) => {
+  async ({ movingListId, currentListId, taskId }, { getState }) => {
+    const token = getState().auth.token;
     const response = await fetch(
       `${API_URL}/lists/${currentListId}/tasks/${taskId}/move`,
       {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           movingListId,
         }),
@@ -221,7 +253,9 @@ const listsSlice = createSlice({
             : list,
         );
         state.items = state.items.map((list) =>
-          list.id === action.payload.movingListId ? action.payload.updatedList : list,
+          list.id === action.payload.movingListId
+            ? action.payload.updatedList
+            : list,
         );
       });
   },

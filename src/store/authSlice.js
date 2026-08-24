@@ -36,11 +36,19 @@ export const loginUser = createAsyncThunk(
   },
 );
 
+const getStoredUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem("user"));
+  } catch {
+    return null;
+  }
+};
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     token: localStorage.getItem("token"),
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    user: getStoredUser(),
     isLoading: false,
     error: null,
   },
