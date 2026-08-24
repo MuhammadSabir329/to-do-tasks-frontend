@@ -1,6 +1,15 @@
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../store/authSlice";
 import UserAvatar from "./UserAvatar";
 
 export default function Header({ onMenuClose }) {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+
+  const handleSignOut = () => {
+    dispatch(logout());
+  };
+
   return (
     <div className="flex px-4 items-center justify-between">
       <div className="flex items-center">
@@ -37,7 +46,7 @@ export default function Header({ onMenuClose }) {
         <p className="text-2xl font-semibold ml-1">Tasks</p>
       </div>
       <div>
-        <UserAvatar />
+        <UserAvatar user={user} onSignOut={handleSignOut} />
       </div>
     </div>
   );

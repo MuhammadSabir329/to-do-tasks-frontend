@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import AccountMenu from "./AccountMenu";
 
-export default function UserAvatar({ user, onSignOut, onUpdateAvatar }) {
+export default function UserAvatar({ user, onSignOut }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const containerRef = useRef(null);
@@ -31,7 +31,7 @@ export default function UserAvatar({ user, onSignOut, onUpdateAvatar }) {
         onClick={() => setIsMenuOpen((prev) => !prev)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative flex items-center justify-center rounded-full p-1 hover:bg-[#3c4043] transition-colors focus:outline-none"
+        className="relative flex items-center justify-center rounded-full p-1 hover:bg-[#3c4043] transition-colors focus:outline-none cursor-pointer"
       >
         <div className="w-9 h-9 rounded-full overflow-hidden bg-[#3c4043] flex items-center justify-center border border-[#4a4e52]">
           {user?.profilePicture ? (
@@ -64,7 +64,6 @@ export default function UserAvatar({ user, onSignOut, onUpdateAvatar }) {
             user={user}
             onClose={() => setIsMenuOpen(false)}
             onSignOut={onSignOut}
-            onUpdateAvatar={onUpdateAvatar}
           />
         </div>
       )}

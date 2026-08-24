@@ -12,15 +12,17 @@ export default function Signup({ onSwitchToSignIn }) {
   const [password, setPassword] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
 
+  const error = useSelector((state) => state.auth.error);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setPreview(URL.createObjectURL(file)); // for visual preview, your existing logic
+    setPreview(URL.createObjectURL(file));
 
     const reader = new FileReader();
     reader.onload = () => {
-      setProfilePicture(reader.result); // Base64 string, for sending to backend
+      setProfilePicture(reader.result);
     };
     reader.readAsDataURL(file);
   };
@@ -202,6 +204,7 @@ export default function Signup({ onSwitchToSignIn }) {
             Sign in
           </button>
         </div>
+        {error && <p className="text-red-400 text-sm text-center">{error}</p>}
       </div>
     </div>
   );
