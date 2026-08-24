@@ -104,7 +104,7 @@ export default function SignIn({ onSwitchToSignUp }) {
           </div>
           <button
             type="submit"
-            className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium py-2.5 rounded-lg transition-colors duration-150 shadow-md focus:outline-none focus:ring-2 focus:ring-[#a8c7fa] mt-2"
+            className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium py-2.5 rounded-lg transition-colors duration-150 shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#a8c7fa] mt-2"
           >
             Sign in
           </button>
@@ -113,7 +113,7 @@ export default function SignIn({ onSwitchToSignUp }) {
           Don't have an account?{" "}
           <button
             type="button"
-            className="text-[#a8c7fa] hover:underline focus:outline-none font-medium"
+            className="text-[#a8c7fa] hover:underline focus:outline-none font-medium cursor-pointer"
             onClick={onSwitchToSignUp}
           >
             Sign up

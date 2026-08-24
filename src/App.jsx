@@ -97,8 +97,10 @@ export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchLists());
-  }, [dispatch]);
+    if (token) {
+      dispatch(fetchLists());
+    }
+  }, [dispatch, token]);
 
   const activeLists = lists.filter((list) => list.isChecked);
 
@@ -122,7 +124,7 @@ export default function App() {
       </div>
     );
   }
-  
+
   return (
     <Main
       onAddListClick={() => setisListModalOpen(!isListModalOpen)}

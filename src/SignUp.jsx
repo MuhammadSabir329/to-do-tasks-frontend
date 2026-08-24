@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "./store/authSlice";
 
 export default function Signup({ onSwitchToSignIn }) {
@@ -189,7 +189,7 @@ export default function Signup({ onSwitchToSignIn }) {
           </div>
           <button
             type="submit"
-            className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium py-2.5 rounded-lg transition-colors duration-150 shadow-md focus:outline-none focus:ring-2 focus:ring-[#a8c7fa] focus:ring-offset-2 focus:ring-offset-[#2d3033]"
+            className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium py-2.5 rounded-lg transition-colors duration-150 shadow-md focus:outline-none focus:ring-2 focus:ring-[#a8c7fa] focus:ring-offset-2 focus:ring-offset-[#2d3033] cursor-pointer"
           >
             Sign up
           </button>
@@ -198,7 +198,7 @@ export default function Signup({ onSwitchToSignIn }) {
           Already have an account?{" "}
           <button
             type="button"
-            className="text-[#a8c7fa] hover:underline focus:outline-none font-medium"
+            className="text-[#a8c7fa] hover:underline focus:outline-none font-medium cursor-pointer"
             onClick={onSwitchToSignIn}
           >
             Sign in
