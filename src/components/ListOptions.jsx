@@ -1,14 +1,14 @@
 import { useState } from "react";
 import NewListForm from "./NewListForm";
+import { useDispatch } from "react-redux";
+import { deleteList, deleteCompletedListTasks } from "../store/listsSlice";
 
 export default function ListOptions({
   list,
   isListOptionsOpen,
   onListOptionClose,
-  onRenameList,
-  onDeleteList,
-  onDeleteCompletedTasks,
 }) {
+  const dispatch = useDispatch();
   const [isRenameListOpen, setIsRenameListOpen] = useState(false);
   const completedTasks = list.tasks.filter((task) => task.isCompleted);
   console.log(completedTasks);
@@ -29,7 +29,7 @@ export default function ListOptions({
           listId={list.id}
           titleText="Rename list"
           defaultValue={list.title}
-          onRenameList={onRenameList}
+          onListOptionClose={onListOptionClose}
         />
       )}
       {list.title === "My Tasks" && (
@@ -40,29 +40,27 @@ export default function ListOptions({
       )}
       {list.title !== "My Tasks" && (
         <button
-          onClick={() => onDeleteList(list.id)}
+          onClick={() => dispatch(deleteList(list.id))}
           className="w-full text-left px-4 py-2 text-[14px] font-semibold text-[#e3e3e3] hover:bg-[#45464a]"
         >
           Delete list
         </button>
       )}
       {completedTasks.length === 0 && (
-        <button
-        className="w-full text-left px-4 py-2 text-[14px] font-semibold text-[#b8b8b8]"
-      >
-        Delete all completed tasks
-      </button>
+        <button className="w-full text-left px-4 py-2 text-[14px] font-semibold text-[#b8b8b8]">
+          Delete all completed tasks
+        </button>
       )}
       {completedTasks.length > 0 && (
         <button
-        onClick={() => {
-          onDeleteCompletedTasks(list.id);
-          onListOptionClose();
-        }}
-        className="w-full text-left px-4 py-2 text-[14px] font-semibold text-[#e3e3e3] hover:bg-[#45464a]"
-      >
-        Delete all completed tasks
-      </button>
+          onClick={() => {
+            dispatch(deleteCompletedListTasks(list.id));
+            onListOptionClose();
+          }}
+          className="w-full text-left px-4 py-2 text-[14px] font-semibold text-[#e3e3e3] hover:bg-[#45464a]"
+        >
+          Delete all completed tasks
+        </button>
       )}
     </div>
   );

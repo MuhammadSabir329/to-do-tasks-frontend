@@ -1,17 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import NewTaskForm from "./NewTaskForm";
 import TaskOptions from "./TaskOptions";
+import { updateTask, deleteTask } from "../store/listsSlice";
+import { useDispatch } from "react-redux";
 
-function TaskRow({
-  task,
-  list,
-  lists,
-  onMarkToggle,
-  onEditTaskTitle,
-  onDeleteTask,
-  onMoveTaskToList,
-  onStarredTaskClick,
-}) {
+function TaskRow({ task, list, lists }) {
+  const dispatch = useDispatch();
   const [isTaskOptionsOpen, setIsTaskOptionsOpen] = useState(false);
   const taskMenuRef = useRef(null);
 
@@ -36,7 +30,16 @@ function TaskRow({
           type="button"
           className="group relative w-4 h-4 rounded-full border-2 border-[#c9cccf] shrink-0 mt-2 flex items-center justify-center transition-transform duration-150 hover:scale-140 hover:border-transparent hover:bg-[#3d3f41] hover:cursor-pointer"
           onMouseDown={(e) => e.preventDefault()}
-          onClick={() => onMarkToggle(list.id, task.id)}
+          onClick={() =>
+            dispatch(
+              updateTask({
+                listId: list.id,
+                taskId: task.id,
+                isCompleted: true,
+                isStarred: true,
+              }),
+            )
+          }
         >
           <svg
             className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
@@ -58,7 +61,15 @@ function TaskRow({
           type="text"
           value={task.title}
           className="ml-3 w-full text-[14px] focus:outline-none"
-          onChange={(e) => onEditTaskTitle(list.id, task.id, e.target.value)}
+          onChange={(e) =>
+            dispatch(
+              updateTask({
+                listId: list.id,
+                taskId: task.id,
+                newTitle: e.target.value,
+              }),
+            )
+          }
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.target.blur();
@@ -86,7 +97,11 @@ function TaskRow({
         </button>
         <button
           className="group relative text-[#c4c7c5] hover:bg-[#282a2c] p-1.5 rounded-full transition-colors hover:cursor-pointer"
-          onClick={() => onStarredTaskClick(list.id, task.id)}
+          onClick={() =>
+            dispatch(
+              updateTask({ listId: list.id, taskId: task.id, isStarred: true }),
+            )
+          }
           onMouseDown={(e) => e.preventDefault()}
         >
           <svg
@@ -122,35 +137,15 @@ function TaskRow({
         lists={lists}
         isTaskOptionsOpen={isTaskOptionsOpen}
         onTaskOptionsClose={() => setIsTaskOptionsOpen(false)}
-        onDeleteTask={onDeleteTask}
-        onMoveTaskToList={onMoveTaskToList}
       />
     </div>
   );
 }
-function UncompletedTasks({
-  list,
-  lists,
-  onMarkToggle,
-  onEditTaskTitle,
-  onDeleteTask,
-  onMoveTaskToList,
-  onStarredTaskClick,
-}) {
+function UncompletedTasks({ list, lists }) {
   return list.tasks
     .filter((task) => !task.isCompleted)
     .map((task) => (
-      <TaskRow
-        key={task.id}
-        task={task}
-        list={list}
-        lists={lists}
-        onMarkToggle={onMarkToggle}
-        onEditTaskTitle={onEditTaskTitle}
-        onDeleteTask={onDeleteTask}
-        onMoveTaskToList={onMoveTaskToList}
-        onStarredTaskClick={onStarredTaskClick}
-      />
+      <TaskRow key={task.id} task={task} list={list} lists={lists} />
     ));
 }
 
@@ -158,9 +153,8 @@ function CompletedTasks({
   list,
   isCompletedTaskListOpen,
   onCompletedTaskListClick,
-  onMarkToggle,
-  onDeleteClick,
 }) {
+  const dispatch = useDispatch();
   return (
     list.tasks.some((task) => task.isCompleted) && (
       <div>
@@ -206,7 +200,16 @@ function CompletedTasks({
                         type="button"
                         className="group relative w-6 h-6 rounded-full border-none shrink-0 mt-1 flex items-center justify-center hover:bg-[#3d3f41] hover:cursor-pointer"
                         onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => onMarkToggle(list.id, task.id)}
+                        onClick={() =>
+                          dispatch(
+                            updateTask({
+                              listId: list.id,
+                              taskId: task.id,
+                              isCompleted: true,
+                              isStarred: true,
+                            }),
+                          )
+                        }
                       >
                         <svg
                           className="w-4 h-4 opacity-100 transition-opacity duration-150"
@@ -244,7 +247,11 @@ function CompletedTasks({
                       type="submit"
                       className="group relative rounded-full border-none shrink-0 mt-1 mr-5 flex items-center justify-center hover:bg-[#3d3f41] hover:cursor-pointer"
                       onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => onDeleteClick(list.id, task.id)}
+                      onClick={() =>
+                        dispatch(
+                          deleteTask({ listId: list.id, taskId: task.id }),
+                        )
+                      }
                     >
                       <svg
                         width="28px"
@@ -307,33 +314,17 @@ function CompletedTasks({
 export default function TasksCard({
   list,
   lists,
-  onEditTaskTitle,
-  onMarkToggle,
-  onDeleteClick,
   onChangeTaskTitle,
   isCompletedTaskListOpen,
   onCompletedTaskListClick,
-  onDeleteTask,
-  onMoveTaskToList,
-  onStarredTaskClick,
 }) {
   return (
     <div className="min-h-60 relative flex1 flex-col overflow-y-auto scrollbar-none">
-      <UncompletedTasks
-        list={list}
-        lists={lists}
-        onMarkToggle={onMarkToggle}
-        onEditTaskTitle={onEditTaskTitle}
-        onDeleteTask={onDeleteTask}
-        onMoveTaskToList={onMoveTaskToList}
-        onStarredTaskClick={onStarredTaskClick}
-      />
+      <UncompletedTasks list={list} lists={lists} />
       <CompletedTasks
         list={list}
         isCompletedTaskListOpen={isCompletedTaskListOpen}
         onCompletedTaskListClick={onCompletedTaskListClick}
-        onMarkToggle={onMarkToggle}
-        onDeleteClick={onDeleteClick}
       />
     </div>
   );

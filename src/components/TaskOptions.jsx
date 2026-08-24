@@ -1,12 +1,14 @@
+import { moveTaskToList, deleteTask } from "../store/listsSlice";
+import { useDispatch } from "react-redux";
+
 export default function ListOptions({
   list,
   task,
   lists,
   isTaskOptionsOpen,
   onTaskOptionsClose,
-  onDeleteTask,
-  onMoveTaskToList,
 }) {
+  const dispatch = useDispatch();
   const listId = list.id;
   const taskId = task.id;
   if (!isTaskOptionsOpen) return null;
@@ -15,7 +17,7 @@ export default function ListOptions({
     <div className="absolute h-59 flex flex-col top-0 right-0 mt-1 w-46 bg-[#36373a] rounded-lg shadow-2xl py-2 z-50 overflow-y-auto scrollbar-none">
       <button
         className="w-full text-left px-4 py-2 text-[14px] font-semibold text-[#e3e3e3] hover:bg-[#45464a]"
-        onClick={() => onDeleteTask(listId, taskId)}
+        onClick={() => dispatch(deleteTask({ listId, taskId }))}
         onMouseDown={(e) => e.preventDefault()}
       >
         Delete task
@@ -46,7 +48,15 @@ export default function ListOptions({
             <button
               type="submit"
               className="w-full h-8 pr-7.5 text-[14px] font-semibold hover:bg-[#45464a] hover:cursor-pointer text-[#e3e3e3]"
-              onClick={() => onMoveTaskToList(list.id, listId, taskId)}
+              onClick={() =>
+                dispatch(
+                  moveTaskToList({
+                    movingListId: list.id,
+                    currentListId: listId,
+                    taskId,
+                  }),
+                )
+              }
               onMouseDown={(e) => e.preventDefault()}
             >
               {list.title}

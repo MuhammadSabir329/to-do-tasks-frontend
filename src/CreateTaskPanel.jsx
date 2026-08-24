@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CreateTaskModal from "./CreateTaskModal";
 
-export default function CreateTaskPanel({ lists, onCreateTask }) {
+export default function CreateTaskPanel({ lists }) {
   const [isCreateTaskModalOpen, setIsCreateTAskModelOpen] = useState(false);
   return (
     <>
@@ -34,7 +34,6 @@ export default function CreateTaskPanel({ lists, onCreateTask }) {
         lists={lists}
         isCreateTaskModalOpen={isCreateTaskModalOpen}
         onCreateTaskModalClose={() => setIsCreateTAskModelOpen(false)}
-        onCreateTask={onCreateTask}
       />
     </>
   );

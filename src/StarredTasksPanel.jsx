@@ -2,7 +2,8 @@ import { useState } from "react";
 import StarredTasksCard from "./components/StarredTasksCard";
 import NoStarredTasksCard from "./NoStarredTasksCard";
 import StarredTaskForm from "./StarredTaskForm";
-
+import { addTask } from "./store/listsSlice";
+import { useDispatch } from "react-redux";
 
 function AddStarredTaskButton({
   lists,
@@ -47,14 +48,8 @@ function AddStarredTaskButton({
   );
 }
 
-export default function StarredTasksPanel({
-  lists,
-  onMarkToggle,
-  onDeleteTask,
-  onMoveTaskToList,
-  onStarredTaskClick,
-  onAddStarredTask,
-}) {
+export default function StarredTasksPanel({ lists }) {
+  const dispatch = useDispatch();
   const anyStarredTask = (lists) => {
     return lists.flatMap((list) => list.tasks).some((task) => task.isStarred);
   };
@@ -63,7 +58,7 @@ export default function StarredTasksPanel({
   const [taskTitle, setTaskTitle] = useState("");
   const handleAddStarredTask = (listId, taskTitle) => {
     if (taskTitle.trim() === "") return;
-    onAddStarredTask(listId, taskTitle);
+    dispatch(addTask({ listId, taskTitle, isStarred: true }));
   };
   return (
     <div className="h-full w-full px-3.5 md:px-0 flex items-start justify-start md:justify-center">
@@ -81,18 +76,9 @@ export default function StarredTasksPanel({
           onChangeTaskTitle={setTaskTitle}
         />
         <div className="min-h-60 relative flex1 flex-col overflow-y-auto scrollbar-none">
-          {!hasStarredTasks && !isAddStarredTaskOpen && (<NoStarredTasksCard />)}
+          {!hasStarredTasks && !isAddStarredTaskOpen && <NoStarredTasksCard />}
           {hasStarredTasks &&
-            lists.map((list) => (
-              <StarredTasksCard
-                list={list}
-                lists={lists}
-                onMarkToggle={onMarkToggle}
-                onDeleteTask={onDeleteTask}
-                onMoveTaskToList={onMoveTaskToList}
-                onStarredTaskClick={onStarredTaskClick}
-              />
-            ))}
+            lists.map((list) => <StarredTasksCard list={list} lists={lists} />)}
         </div>
       </div>
     </div>

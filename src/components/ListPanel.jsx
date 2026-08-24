@@ -1,4 +1,7 @@
-function ListHeader({isListsOpen,onListsClose}) {
+import { useDispatch } from "react-redux";
+import { updateList } from "../store/listsSlice";
+
+function ListHeader({ isListsOpen, onListsClose }) {
   return (
     <div
       className="flex items-center justify-between px-1 py-1 cursor-pointer rounded-lg "
@@ -21,7 +24,8 @@ function ListHeader({isListsOpen,onListsClose}) {
   );
 }
 
-function ListItems({ lists, onCheckedClose }) {
+function ListItems({ lists }) {
+  const dispatch = useDispatch();
   if (lists.length > 0)
     return (
       <div className="flex flex-col mt-2 gap-0.5">
@@ -30,7 +34,9 @@ function ListItems({ lists, onCheckedClose }) {
             <div
               key={list.id}
               className="flex items-center p-1.5 pl-2 rounded-full hover:bg-[#282a2c] transition-colors cursor-pointer"
-              onClick={() => onCheckedClose(list.id)}
+              onClick={() =>
+                dispatch(updateList({ listId: list.id, isChecked: true }))
+              }
             >
               <div className="flex items-center gap-4 w-full">
                 <input
@@ -43,7 +49,9 @@ function ListItems({ lists, onCheckedClose }) {
                     backgroundSize: "100%",
                   }}
                   checked={list.isChecked}
-                  onChange={() => onCheckedClose(list.id)}
+                  onChange={() =>
+                    dispatch(updateList({ listId: list.id, isChecked: true }))
+                  }
                 />
                 <span className="text-[14px] font-medium text-[#e3e3e3]">
                   {list.title}
@@ -61,7 +69,7 @@ function ListItems({ lists, onCheckedClose }) {
     );
 }
 
-function AddListButton({onAddListClick}) {
+function AddListButton({ onAddListClick }) {
   return (
     <button
       onClick={onAddListClick}
@@ -82,21 +90,21 @@ function AddListButton({onAddListClick}) {
   );
 }
 
-export default function ListPanel({lists,
+export default function ListPanel({
+  lists,
   isListsOpen,
   onListsClose,
-  onCheckedClose,
   onAddListClick,
 }) {
   return (
-  <>
-    <ListHeader isListsOpen={isListsOpen} onListsClose={onListsClose} />
-    {isListsOpen && (
-      <div className="flex flex-col mt-0.5">
-        <ListItems lists={lists} onCheckedClose={onCheckedClose} />
-      </div>
-    )}
-    <AddListButton onAddListClick={onAddListClick} />
-  </>
-);
+    <>
+      <ListHeader isListsOpen={isListsOpen} onListsClose={onListsClose} />
+      {isListsOpen && (
+        <div className="flex flex-col mt-0.5">
+          <ListItems lists={lists} />
+        </div>
+      )}
+      <AddListButton onAddListClick={onAddListClick} />
+    </>
+  );
 }

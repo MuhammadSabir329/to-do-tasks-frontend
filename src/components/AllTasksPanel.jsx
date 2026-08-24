@@ -3,13 +3,10 @@ import NoTasksCard from "./NoTasksCard";
 import TasksCard from "./TasksCard";
 import NewTaskForm from "./NewTaskForm";
 import ListOptions from "./ListOptions";
+import { addTask } from "../store/listsSlice";
+import { useDispatch } from "react-redux";
 
-function TaskHeader({
-  list,
-  onRenameList,
-  onDeleteList,
-  onDeleteCompletedTasks,
-}) {
+function TaskHeader({ list }) {
   const [isListOptionsOpen, setIsListOptionsOpen] = useState(false);
   const listMenuRef = useRef(null);
 
@@ -50,9 +47,6 @@ function TaskHeader({
         list={list}
         isListOptionsOpen={isListOptionsOpen}
         onListOptionClose={() => setIsListOptionsOpen(false)}
-        onRenameList={onRenameList}
-        onDeleteList={onDeleteList}
-        onDeleteCompletedTasks={onDeleteCompletedTasks}
       />
     </div>
   );
@@ -101,22 +95,7 @@ function AddTaskButton({
   );
 }
 
-function TaskListCard({
-  list,
-  lists,
-  count,
-  handleAddTask,
-  onEditTaskTitle,
-  onMarkToggle,
-  onDeleteClick,
-  onRenameList,
-  onDeleteList,
-  onDeleteCompletedTasks,
-  onDeleteTask,
-  onMoveTaskToList,
-  onStarredTaskClick,
-  isMenuOpen,
-}) {
+function TaskListCard({ list, lists, count, handleAddTask, isMenuOpen }) {
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
   const [isCompletedTaskListOpen, setIsCompletedTaskListOpen] = useState(false);
@@ -131,12 +110,7 @@ function TaskListCard({
         ${count >= 3 ? "w-75 min-w-75 shrink-0" : ""}
       `}
     >
-      <TaskHeader
-        list={list}
-        onRenameList={onRenameList}
-        onDeleteList={onDeleteList}
-        onDeleteCompletedTasks={onDeleteCompletedTasks}
-      />
+      <TaskHeader list={list} />
       <AddTaskButton
         isAddTaskOpen={isAddTaskOpen}
         onOpenAddTask={() => setIsAddTaskOpen(true)}
@@ -152,40 +126,22 @@ function TaskListCard({
         <TasksCard
           list={list}
           lists={lists}
-          onEditTaskTitle={onEditTaskTitle}
-          onMarkToggle={onMarkToggle}
-          onDeleteClick={onDeleteClick}
           isCompletedTaskListOpen={isCompletedTaskListOpen}
           onCompletedTaskListClick={onCompletedTaskListClick}
-          onDeleteTask={onDeleteTask}
-          onMoveTaskToList={onMoveTaskToList}
-          onStarredTaskClick={onStarredTaskClick}
         />
       )}
     </div>
   );
 }
 
-export default function AllTasksPanel({
-  lists,
-  onAddTask,
-  onEditTaskTitle,
-  onMarkToggle,
-  onDeleteClick,
-  onRenameList,
-  onDeleteList,
-  onDeleteCompletedTasks,
-  onDeleteTask,
-  onMoveTaskToList,
-  onStarredTaskClick,
-  isMenuOpen,
-}) {
+export default function AllTasksPanel({ lists, isMenuOpen }) {
+  const dispatch = useDispatch();
   const activeLists = lists.filter((list) => list.isChecked);
   const count = activeLists.length;
 
   const handleAddTask = (listId, taskTitle) => {
     if (taskTitle.trim() === "") return;
-    onAddTask(listId, taskTitle);
+    dispatch(addTask({ listId, taskTitle }));
   };
 
   return (
@@ -203,15 +159,6 @@ export default function AllTasksPanel({
           lists={lists}
           count={count}
           handleAddTask={handleAddTask}
-          onEditTaskTitle={onEditTaskTitle}
-          onMarkToggle={onMarkToggle}
-          onDeleteClick={onDeleteClick}
-          onRenameList={onRenameList}
-          onDeleteList={onDeleteList}
-          onDeleteCompletedTasks={onDeleteCompletedTasks}
-          onDeleteTask={onDeleteTask}
-          onMoveTaskToList={onMoveTaskToList}
-          onStarredTaskClick={onStarredTaskClick}
           isMenuOpen={isMenuOpen}
         />
       ))}

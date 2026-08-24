@@ -1,16 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import TaskOptions from "./TaskOptions";
+import { updateTask } from "../store/listsSlice";
+import { useDispatch } from "react-redux";
 
-
-function StarredTaskRow({
-  task,
-  list,
-  lists,
-  onMarkToggle,
-  onDeleteTask,
-  onMoveTaskToList,
-  onStarredTaskClick,
-}) {
+function StarredTaskRow({ task, list, lists }) {
+  const dispatch = useDispatch();
   const [isTaskOptionsOpen, setIsTaskOptionsOpen] = useState(false);
   const taskMenuRef = useRef(null);
 
@@ -35,7 +29,16 @@ function StarredTaskRow({
           type="button"
           className="group relative w-4 h-4 rounded-full border-2 border-[#c9cccf] shrink-0 flex items-center justify-center transition-transform duration-150 hover:scale-140 hover:border-transparent hover:bg-[#3d3f41] hover:cursor-pointer"
           onMouseDown={(e) => e.preventDefault()}
-          onClick={() => onMarkToggle(list.id, task.id)}
+          onClick={() =>
+            dispatch(
+              updateTask({
+                listId: list.id,
+                taskId: task.id,
+                isCompleted: true,
+                isStarred: true,
+              }),
+            )
+          }
         >
           <svg
             className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
@@ -75,7 +78,15 @@ function StarredTaskRow({
         </button>
         <button
           className="group relative mr-4 text-[#c4c7c5] hover:bg-[#282a2c] p-1.5 rounded-full transition-colors hover:cursor-pointer"
-          onClick={() => onStarredTaskClick(list.id, task.id)}
+          onClick={() =>
+            dispatch(
+              updateTask({
+                listId: list.id,
+                taskId: task.id,
+                isStarred: true,
+              }),
+            )
+          }
           onMouseDown={(e) => e.preventDefault()}
         >
           <svg
@@ -111,34 +122,15 @@ function StarredTaskRow({
         lists={lists}
         isTaskOptionsOpen={isTaskOptionsOpen}
         onTaskOptionsClose={() => setIsTaskOptionsOpen(false)}
-        onDeleteTask={onDeleteTask}
-        onMoveTaskToList={onMoveTaskToList}
       />
     </div>
   );
 }
 
-
-export default function StarredTasksCard({
-  list,
-  lists,
-  onMarkToggle,
-  onDeleteTask,
-  onMoveTaskToList,
-  onStarredTaskClick,
-}) {
+export default function StarredTasksCard({ list, lists }) {
   return list.tasks
     .filter((task) => task.isStarred)
     .map((task) => (
-      <StarredTaskRow
-        key={task.id}
-        task={task}
-        list={list}
-        lists={lists}
-        onMarkToggle={onMarkToggle}
-        onDeleteTask={onDeleteTask}
-        onMoveTaskToList={onMoveTaskToList}
-        onStarredTaskClick={onStarredTaskClick}
-      />
+      <StarredTaskRow key={task.id} task={task} list={list} lists={lists} />
     ));
 }

@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { addTask } from "./store/listsSlice";
+import { useDispatch } from "react-redux";
 
 export default function CreateTaskModal({
   lists,
   isCreateTaskModalOpen,
   onCreateTaskModalClose,
-  onCreateTask,
 }) {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -40,7 +42,7 @@ export default function CreateTaskModal({
   };
 
   const onSubmit = (data) => {
-    onCreateTask(selectedListId, data.title);
+    dispatch(addTask({ listId: selectedListId, taskTitle: data.title }));
     handleClose();
   };
 
@@ -55,9 +57,7 @@ export default function CreateTaskModal({
         className="bg-[#2d3033] text-white w-80 h-65 md:w-100 p-6 rounded-[28px] justify-between shadow-2xl flex flex-col gap-5"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-normal text-[#e3e3e3] px-1">
-          Create task
-        </h2>
+        <h2 className="text-xl font-normal text-[#e3e3e3] px-1">Create task</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="relative flex flex-col gap-1.5">
@@ -96,7 +96,11 @@ export default function CreateTaskModal({
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 15l7-7 7 7"
+                />
               </svg>
             </button>
 

@@ -1,14 +1,16 @@
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { addNewList, updateList } from "../store/listsSlice";
 
 function ListModal({
   isListModalOpen,
   onListModalClose,
-  onAddNewList,
   listId,
   titleText,
   defaultValue,
-  onRenameList,
+  onListOptionClose,
 }) {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -28,13 +30,14 @@ function ListModal({
   };
 
   const onSubmit = (data, listId) => {
-  if (listId) {
-    onRenameList(listId, data.title);
-  } else {
-    onAddNewList(data);
-  }
-  handleClose();
-};
+    if (listId) {
+      dispatch(updateList({ listId, newTitle: data.title }));
+      onListOptionClose();
+    } else {
+      dispatch(addNewList(data));
+    }
+    handleClose();
+  };
 
   if (!isListModalOpen) return null;
 
@@ -47,11 +50,12 @@ function ListModal({
         className="bg-[#2d3033] text-white w-70 p-6 rounded-[28px] shadow-2xl flex flex-col gap-5"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-normal text-[#e3e3e3] px-1">
-          {titleText}
-        </h2>
+        <h2 className="text-xl font-normal text-[#e3e3e3] px-1">{titleText}</h2>
 
-        <form onSubmit={handleSubmit((data) => onSubmit(data, listId))} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit((data) => onSubmit(data, listId))}
+          className="flex flex-col gap-4"
+        >
           <div className="relative flex flex-col gap-1.5">
             <input
               className="w-full text-[15px] pt-3 pb-2 px-3 bg-[#3c4043] border-b-2 border-[#a8c7fa] rounded-t-md text-white placeholder-gray-400 focus:outline-none focus:bg-[#3c4043] transition-colors"
@@ -100,22 +104,20 @@ function ListModal({
 export default function NewListForm({
   isListModalOpen,
   onListModalClose,
-  onAddNewList,
   listId,
   titleText,
   defaultValue,
-  onRenameList,
+  onListOptionClose,
 }) {
   return (
     <>
       <ListModal
         isListModalOpen={isListModalOpen}
         onListModalClose={onListModalClose}
-        onAddNewList={onAddNewList}
         listId={listId}
         titleText={titleText}
         defaultValue={defaultValue}
-        onRenameList={onRenameList}
+        onListOptionClose={onListOptionClose}
       />
     </>
   );
