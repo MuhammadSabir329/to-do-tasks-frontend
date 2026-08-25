@@ -11,12 +11,28 @@ export default function Signup({ onSwitchToSignIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
+  const [fileError, setFileError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const error = useSelector((state) => state.auth.error);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    const allowedTypes = ["image/png", "image/jpeg"];
+    if (!allowedTypes.includes(file.type)) {
+      setFileError("Only PNG and JPEG images are allowed.");
+      return;
+    }
+
+    const maxSizeInBytes = 5 * 1024 * 1024;
+    if (file.size > maxSizeInBytes) {
+      setFileError("Image must be smaller than 5MB.");
+      return;
+    }
+
+    setFileError("");
 
     setPreview(URL.createObjectURL(file));
 
@@ -27,8 +43,26 @@ export default function Signup({ onSwitchToSignIn }) {
     reader.readAsDataURL(file);
   };
 
+  const isValidPassword = (password) => {
+    const hasMinLength = password.length >= 8;
+    const hasNumber = /\d/.test(password);
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    return hasMinLength && hasNumber && hasLetter && hasSpecialChar;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!isValidPassword(password)) {
+      setPasswordError(
+        "Password must be at least 8 characters and include a letter, a number, and a special character.",
+      );
+      return;
+    }
+    setPasswordError("");
+
     dispatch(
       registerUser({ email, password, user_name: name, profilePicture }),
     );
@@ -48,6 +82,8 @@ export default function Signup({ onSwitchToSignIn }) {
         <div className="flex flex-col items-center gap-2">
           <input
             type="file"
+            name="profile"
+            id="profile"
             ref={fileInputRef}
             onChange={handleFileChange}
             accept="image/*"
@@ -85,9 +121,20 @@ export default function Signup({ onSwitchToSignIn }) {
               </svg>
             )}
           </div>
-          <span className="text-xs text-[#9aa0a6]">
-            Upload photo (optional)
-          </span>
+          {fileError && (
+            <p className="text-red-400 text-xs text-center">{fileError}</p>
+          )}
+          <div className="flex flex-col items-center">
+            <label
+              htmlFor="profile"
+              className="text-xs font-medium"
+            >
+              Upload photo (optional)
+            </label>
+            <span className="text-[10px] text-[#9aa0a6]">
+              (PNG or JPEG, max 5MB)
+            </span>
+          </div>
         </div>
         <form
           className="flex flex-col justify-center gap-3"
@@ -95,7 +142,7 @@ export default function Signup({ onSwitchToSignIn }) {
         >
           <div className="flex flex-col gap-1 text-left">
             <label htmlFor="name" className="text-sm font-medium text-gray-200">
-              Name
+              Name <span className="text-red-400">*</span>
             </label>
             <input
               type="text"
@@ -103,7 +150,7 @@ export default function Signup({ onSwitchToSignIn }) {
               name="name"
               placeholder="Enter your full name"
               className="w-full bg-[#3c4043] text-white px-3 py-2.5 rounded-t-md border-b-2 border-transparent focus:border-[#a8c7fa] outline-none transition-colors placeholder:text-[#9aa0a6] text-sm"
-              // required
+              required
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -113,7 +160,7 @@ export default function Signup({ onSwitchToSignIn }) {
               htmlFor="email"
               className="text-sm font-medium text-gray-200"
             >
-              Email
+              Email <span className="text-red-400">*</span>
             </label>
             <input
               type="email"
@@ -131,7 +178,7 @@ export default function Signup({ onSwitchToSignIn }) {
               htmlFor="password"
               className="text-sm font-medium text-gray-200"
             >
-              Password
+              Password <span className="text-red-400">*</span>
             </label>
             <div className="relative flex items-center">
               <input
@@ -186,6 +233,9 @@ export default function Signup({ onSwitchToSignIn }) {
                 )}
               </button>
             </div>
+            {passwordError && (
+              <p className="text-red-400 text-xs mt-1">{passwordError}</p>
+            )}
           </div>
           <button
             type="submit"
