@@ -64,7 +64,7 @@ function Main({
         )}
 
         <main className="flex-1 h-full w-full pl-0 md:pr-2 min-w-0 ">
-          {activeTab === "starred" && <StarredTasksPanel lists={lists} />}
+          {activeTab === "starred" && <StarredTasksPanel lists={lists} isMenuOpen={isMenuOpen} />}
           {activeTab === "all" && (
             <>
               {activeLists.length === 0 && <AllListsHidden />}

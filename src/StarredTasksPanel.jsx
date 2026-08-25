@@ -48,7 +48,7 @@ function AddStarredTaskButton({
   );
 }
 
-export default function StarredTasksPanel({ lists }) {
+export default function StarredTasksPanel({ lists, isMenuOpen}) {
   const dispatch = useDispatch();
   const anyStarredTask = (lists) => {
     return lists.flatMap((list) => list.tasks).some((task) => task.isStarred);
@@ -62,7 +62,7 @@ export default function StarredTasksPanel({ lists }) {
   };
   return (
     <div className="h-full w-full px-3.5 md:px-0 flex items-start justify-start md:justify-center">
-      <div className="shrink-0 w-100 md:w-170 h-110 bg-[#131314] border-[0.5px] border-transparent hover:border-[#ffffff] rounded-2xl mt-5 md:mr-0 md:ml-7 py-4 px-2.5 flex flex-col select-none">
+      <div className={`shrink-0 ${isMenuOpen ? "w-80 md:w-170" : "w-full md:w-170"} h-110 bg-[#131314] border-[0.5px] border-transparent hover:border-[#ffffff] rounded-2xl mt-5 md:mr-0 md:ml-7 py-4 px-2.5 flex flex-col select-none`}>
         <h3 className="text-[18px] font-medium text-[#e3e3e3] mb-2 pl-1.5">
           Starred Tasks
         </h3>

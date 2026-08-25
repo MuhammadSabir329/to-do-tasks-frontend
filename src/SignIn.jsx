@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "./store/authSlice";
 
 export default function SignIn({ onSwitchToSignUp }) {
@@ -7,6 +7,7 @@ export default function SignIn({ onSwitchToSignUp }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const error = useSelector((state) => state.auth.error);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -119,6 +120,7 @@ export default function SignIn({ onSwitchToSignUp }) {
             Sign up
           </button>
         </div>
+        {error && <p className="text-red-400 text-sm text-center">{error}</p>}
       </div>
     </div>
   );
