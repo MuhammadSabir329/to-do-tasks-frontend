@@ -9,6 +9,7 @@ import AllListsHidden from "./components/AllListsHidden";
 import CreateTaskPanel from "./CreateTaskPanel";
 import TabNav from "./TabNav";
 import StarredTasksPanel from "./StarredTasksPanel";
+import { clearError } from "./store/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchLists,
@@ -64,7 +65,9 @@ function Main({
         )}
 
         <main className="flex-1 h-full w-full pl-0 md:pr-2 min-w-0 ">
-          {activeTab === "starred" && <StarredTasksPanel lists={lists} isMenuOpen={isMenuOpen} />}
+          {activeTab === "starred" && (
+            <StarredTasksPanel lists={lists} isMenuOpen={isMenuOpen} />
+          )}
           {activeTab === "all" && (
             <>
               {activeLists.length === 0 && <AllListsHidden />}
@@ -108,10 +111,20 @@ export default function App() {
     return (
       <>
         {authView === "signup" && (
-          <SignUp onSwitchToSignIn={() => setAuthView("signin")} />
+          <SignUp
+            onSwitchToSignIn={() => {
+              dispatch(clearError());
+              setAuthView("signin");
+            }}
+          />
         )}
         {authView === "signin" && (
-          <SignIn onSwitchToSignUp={() => setAuthView("signup")} />
+          <SignIn
+            onSwitchToSignUp={() => {
+              dispatch(clearError());
+              setAuthView("signup");
+            }}
+          />
         )}
       </>
     );

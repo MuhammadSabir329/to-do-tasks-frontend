@@ -103,7 +103,7 @@ export default function Signup({ onSwitchToSignIn }) {
               name="name"
               placeholder="Enter your full name"
               className="w-full bg-[#3c4043] text-white px-3 py-2.5 rounded-t-md border-b-2 border-transparent focus:border-[#a8c7fa] outline-none transition-colors placeholder:text-[#9aa0a6] text-sm"
-              required
+              // required
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
