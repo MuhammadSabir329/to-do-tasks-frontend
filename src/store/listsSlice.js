@@ -116,12 +116,12 @@ export const updateTask = createAsyncThunk(
     }
 
     if (isStarred !== undefined) {
-      body.isStarred = task.isStarred;
+      body.isStarred = !task.isStarred;
     }
 
     if (isStarred !== undefined && isCompleted !== undefined) {
-      body.isStarred = task.isStarred;
-      body.isCompleted = task.isCompleted;
+      body.isStarred = !task.isStarred;
+      body.isCompleted = !task.isCompleted;
     }
 
     const response = await fetch(`${API_URL}/lists/${listId}/tasks/${taskId}`, {

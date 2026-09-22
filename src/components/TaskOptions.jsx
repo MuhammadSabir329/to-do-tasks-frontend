@@ -1,7 +1,7 @@
 import { moveTaskToList, deleteTask } from "../store/listsSlice";
 import { useDispatch } from "react-redux";
 
-export default function ListOptions({
+export default function TaskOptions({
   list,
   task,
   lists,
