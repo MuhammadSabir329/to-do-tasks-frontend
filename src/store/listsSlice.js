@@ -203,6 +203,9 @@ const listsSlice = createSlice({
         state.items = action.payload;
         state.isLoading = false;
       })
+      .addCase(fetchLists.rejected, (state) => {
+        state.isLoading = false;
+      })
       .addCase(addNewList.fulfilled, (state, action) => {
         state.items = [...state.items, action.payload];
       })
